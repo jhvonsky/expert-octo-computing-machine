@@ -26,7 +26,7 @@ function getModal(v) {
     return `
                 <div class="col-md-4 my-3">
                     <div class="card">
-                        <img src="${v.Poster}" class="card-img-top" alt="">
+                        <img src="${v.Poster}" class="card-img-top">
                             <div class="card-body">
                             <h5 class="card-title">${v.Title}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">${v.Year}</h6>
@@ -43,7 +43,7 @@ function movieDetail(md) {
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-3">
-                            <img src="${md.Poster}" class="img-fluid" alt="">
+                            <img src="${md.Poster}" class="img-fluid">
                         </div>
                         <div class="col-md">
                             <ul class="list-group">
