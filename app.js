@@ -1,6 +1,7 @@
-const btn = document.querySelector('.container .row .search');
-    btn.addEventListener('click', function () { 
-            const input = document.querySelector('input');
+function getMovie() {
+    const btn = document.querySelector('.container .row .search');
+    btn.addEventListener('click', function () {
+        const input = document.querySelector('input');
         fetch(`https://www.omdbapi.com/?apikey=cbd04506&s=${input.value}`)
             .then(response => response.json())
             .then(response => {
@@ -20,10 +21,10 @@ const btn = document.querySelector('.container .row .search');
                     })
                 })
             }).catch(res => document.querySelector('.modal-body').innerHTML = res);
-        })
+    })
     
-function getModal(v) {
-    return `
+    function getModal(v) {
+        return `
                 <div class="col-md-4 my-3">
                     <div class="card">
                         <img src="${v.Poster}" class="card-img-top">
@@ -35,10 +36,10 @@ function getModal(v) {
                     </div>
                 </div>
                 `
-}
+    }
 
-function movieDetail(md) {
-    return `
+    function movieDetail(md) {
+        return `
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
@@ -58,4 +59,7 @@ function movieDetail(md) {
                 </div>
             </div>
     `
+    }
 }
+
+getMovie()
