@@ -1,6 +1,6 @@
 const btn = document.querySelector('.container .row .search');
-btn.addEventListener('click', function () { 
-        const input = document.querySelector('input');
+    btn.addEventListener('click', function () { 
+            const input = document.querySelector('input');
         fetch(`https://www.omdbapi.com/?apikey=cbd04506&s=${input.value}`)
             .then(response => response.json())
             .then(response => {
@@ -9,38 +9,18 @@ btn.addEventListener('click', function () {
                 val.forEach(v => output += getModal(v));
                 document.querySelector('.container .movie-container').innerHTML = output;
 
-                const modalButton =  document.querySelectorAll('.modal-detail-button');
+                const modalButton = document.querySelectorAll('.modal-detail-button');
 
                 modalButton.forEach(modal => {
                     modal.addEventListener('click', function () {
                         const imdbid = this.dataset.imdb;
                         fetch(`https://www.omdbapi.com/?apikey=cbd04506&i=${imdbid}`)
                             .then(res => res.json())
-                            .then(res => {
-                                const modalBody = document.querySelector('.modal-body');
-                                const modalOutput = movieDetail(res);
-
-                                modalBody.innerHTML = modalOutput;
-                            })
+                            .then(res => document.querySelector('.modal-body').innerHTML = movieDetail(res))
                     })
-                })                
-            }).catch(res => {
-                const modalBody = document.querySelector('.modal-body');
-                const errorOutput = `
-                <div class="col-md-4 my-3">
-                    <div class="card">
-                        <h2>Data Not Found</h2>
-                            <div class="card-body">
-                                <h5 class="card-title">Please input specific keyword</h5>
-                            </div>
-                    </div>
-                </div>
-                `;
-                
-                const result = res;
-                modalBody.innerHTML = result;
-            })
-     })
+                })
+            }).catch(res => document.querySelector('.modal-body').innerHTML = res);
+        })
     
 function getModal(v) {
     return `
