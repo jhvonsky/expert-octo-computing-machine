@@ -1,43 +1,67 @@
 function getMovie() {
-    /*
-    const btn = document.querySelector('.container .row .search');
-        btn.addEventListener('click', function () {
-            const input = document.querySelector('input');
-            fetch(`https://www.omdbapi.com/?apikey=cbd04506&s=${input.value}`)
-                .then(response => response.json())
-                .then(response => {
-                    const val = response.Search;
-                    let output = '';
-                    val.forEach(v => output += getModal(v));
-                    document.querySelector('.container .movie-container').innerHTML = output;
-
-                    const modalButton = document.querySelectorAll('.modal-detail-button');
-
-                    modalButton.forEach(modal => {
-                        modal.addEventListener('click', function () {
-                            const imdbid = this.dataset.imdb;
-                            fetch(`https://www.omdbapi.com/?apikey=cbd04506&i=${imdbid}`)
-                                .then(res => res.json())
-                                .then(res => document.querySelector('.modal-body').innerHTML = movieDetail(res))
-                        })
-                    })
-                }).catch(res => document.querySelector('.modal-body').innerHTML = res);
-        })
-        */
-
        const btn = document.querySelector('.container .row .search');
         btn.addEventListener('click', async function () {
-            const input = document.querySelector('input');
-
-            const movies = await getMovies(input.value);
-            updateUI(movies);
+            try {
+                const input = document.querySelector('input');
+                const movies = await getMovies(input.value);
+                updateUI(movies);
+            }
+            catch (error) {
+                console.log(error);
+            }
         })
     
+    // async & await with try and catch
+    // promise with then and catch
         
+    function updateUIDetail(y) {
+        const mDetail = movieDetail(y);
+        document.querySelector('.modal-body').innerHTML = mDetail;
+    }
+    
+    function updateUI(mov) {
+        let output = '';
+        mov.forEach(m => output += getModal(m));
+        document.querySelector('.container .movie-container').innerHTML = output;
+    }
+
     function getMovies(keyword) {
             return fetch(`https://www.omdbapi.com/?apikey=cbd04506&s=${keyword}`)
-            .then(response => response.json())
-            .then(response => response.Search)
+                .then(response => {
+                    if (!response.ok) {
+                        // console.log(response);
+                        throw new Error(alert(response.statusText));
+                    } else if (keyword === '') {
+                        alert('Please fill up the input');
+                    } else if (response.Error.value === 'Incorrect IMDb ID.') {
+                        errTxt.innerHTML = '';
+                    }
+                      //else if (response.Response == 'False') {
+                    //     const errTxt = document.querySelector('.container .movie-container h1');
+                    //     errTxt.innerHTML = response.Error;
+    
+                    //     // throw new Error(response.Error);
+                    // }
+                    
+                    return response.json();
+                })
+                .then(response => {
+                    // when function is not fullfilled yet
+                    console.log(response);                    
+                    const errTxt = document.querySelector('.container .movie-container h1');
+                    if (response.Response === 'False') {
+                        errTxt.innerHTML = response.Error;
+
+                        // throw new Error(response.Error);
+                    } 
+
+                    // when the function is not fullfilled
+                    
+                    const val = response.Search;
+                    let inner = '';
+                    val.forEach(m => inner += getModal(m));
+                    document.querySelector('.movie-container').innerHTML = inner;
+                })
         }
     
     
@@ -60,16 +84,7 @@ function getMovie() {
             })
     }    
 
-    function updateUIDetail(y) {
-        const mDetail = movieDetail(y);
-        document.querySelector('.modal-body').innerHTML = mDetail;
-    }
     
-    function updateUI(mov) {
-        let output = '';
-        mov.forEach(m => output += getModal(m));
-        document.querySelector('.container .movie-container').innerHTML = output;
-    }
     
     function getModal(v) {
         return `
